@@ -1,0 +1,14 @@
+extends /partials/layout.jade
+block app
+
+  #toolbar(ng-controller="ToolbarCtrl as toolbar")
+    button(
+      ng-click="toolbar.tooglePlay()"
+      ng-class="{'icon-play': playing, 'icon-pause': !playing}"
+    )
+    button(ng-click="toolbar.open()").icon-file
+    button(ng-click="toolbar.changeShape()").icon-shuffle
+    button(ng-click="toolbar.changeTexture()").icon-image
+    button(ng-click="toolbar.resetCamera()").icon-repeat
+    button(ng-click="toolbar.showSettings()").icon-cog
+    div#slider

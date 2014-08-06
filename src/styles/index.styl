@@ -1,0 +1,46 @@
+
+@import "sk.styl"
+
+toolbar_height = 80px
+
+body
+  background #333
+  overflow hidden
+  color #aaa
+
+#slider
+  background #ccc
+  height 4px
+  width 100%
+  position fixed
+  bottom 0
+
+#renderer
+  margin-bottom toolbar_height
+
+#toolbar
+  border-top 3px solid #111
+  background #222
+  position fixed
+  bottom 0
+  width 100%
+  height toolbar_height
+  text-align center
+  button
+    padding 10px 20px
+    cursor pointer
+    color #aaa
+    background transparent
+    border none
+    font-size 2.8em
+    transition .25s
+    transform scale(0.75)
+    &:hover
+      transform scale(1.0)
+      color #eee
+
+@media screen and (max-width: 500px)
+  #toolbar
+    button
+      padding 20px 10px
+      font-size 2em

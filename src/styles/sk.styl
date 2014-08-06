@@ -1,0 +1,166 @@
+
+// Dependencies
+
+@import url("vendors/feather/feather.css")
+
+// Config
+
+small_space = 10px
+big_space = small_space * 4
+color_primary = #3498db
+color_background = #2c3e50
+border_size = 3px
+border_radius = 0
+font_title = sans-serif
+font_body = sans-serif
+transition_duration = .25s
+
+// Anims
+
+@keyframes appear
+  from
+    opacity 0
+    transform scale(0.9)
+  to
+    opacity 1
+    transform scale(1)
+
+// Reset
+
+body
+  box-sizing border-box
+  padding 0
+  margin 0
+  color #444
+  font-family font_body
+  font-size 0.9em
+
+*, *:before, *:after
+  box-sizing inherit
+
+p
+  padding 0
+  margin 0
+
+// General
+
+.sk-description
+  font-size 1.3em
+
+.sk-small
+  font-size .8em
+  color #aaa
+
+.sk-right
+  float right
+
+.sk-icon
+  cursor pointer
+  color #888
+  &:hover
+    color #444
+
+.sk-box
+  padding 10px
+  background #eee
+  margin-top 10px
+  border 3px solid #ccc
+
+a
+  color color_primary
+  text-decoration none
+  cursor pointer
+  &:hover
+    color darken(color_primary, 10)
+    border-bottom 1px solid darken(color_primary, 10)
+
+.sk-button-group
+  button
+    margin-right small_space
+    &:last-child
+      margin-right 0
+  margin-bottom small_space
+
+nav
+  padding small_space
+  background color_background
+  text-align center
+  .sk-icon
+    transition transition_duration
+    padding small_space small_space * 2
+    font-size 2.4em
+    transform scale(0.8)
+    color #aaa
+    &:hover
+      color #aaa
+      transform scale(1)
+    &.selected
+      color #fff
+      transform scale(1)
+
+// Directives
+
+.sk-sidebar
+
+  .icon
+    padding small_space
+    font-size 2em
+    cursor pointer
+    color #aaa
+    position absolute
+    top 0
+    &:hover
+      color #eee
+
+  .content
+    padding small_space * 2
+    transition .3s
+    position absolute
+    top 0
+    width 250px
+    background rgba(0, 0, 0, .8)
+    height 100%
+
+  &.left
+    .content
+      left -250px
+      &.active
+        left 0%
+
+  &.right
+    .content
+      right -250px
+      &.active
+        right 0%
+    .icon
+      right 0
+
+.sk-textinput
+  display block
+  width 100%
+  input[type="text"]
+    width 70%
+    border-radius border_radius 0 0 border_radius
+    border-right none
+    border-left border_size solid darken(color_primary, 10)
+    border-bottom border_size solid darken(color_primary, 10)
+    border-top border_size solid darken(color_primary, 10)
+  button
+    width 30%
+    border-radius 0 border_radius border_radius 0
+
+.sk-view
+  padding big_space
+  animation appear transition_duration
+
+.sk-checklist
+  padding small_space 0
+
+.sk-checkitem
+  padding small_space
+  color #444
+  cursor pointer
+  border border_size solid transparent
+  &.current
+    background #eee
+    border border_size solid #ccc

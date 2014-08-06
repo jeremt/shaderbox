@@ -1,0 +1,10 @@
+{
+  "name": "Gitbutler",
+  "devDependencies": {
+    "angular": "~1.2.21"
+  },
+  "dependencies": {
+    "jwerty": "~0.3.2",
+    "threejs": "*"
+  }
+}
