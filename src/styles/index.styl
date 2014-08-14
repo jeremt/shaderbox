@@ -9,6 +9,7 @@ body
   color #aaa
 
 #slider
+  z-index 2
   background #ccc
   height 4px
   width 100%
@@ -16,17 +17,23 @@ body
   bottom 0
 
 #renderer
-  margin-bottom toolbar_height
+  z-index 0
+  position fixed
+  padding 0
+  height 100%
+  width 50%
 
 #toolbar
-  border-top 3px solid #111
-  background #222
+  z-index 1
+  border-right 3px solid #111
+  background rgba(0, 0, 0, 0.8)
   position fixed
-  bottom 0
-  width 100%
-  height toolbar_height
+  height 100%
+  width 80px
   text-align center
   button
+    outline none
+    display block
     padding 10px 20px
     cursor pointer
     color #aaa
@@ -38,9 +45,3 @@ body
     &:hover
       transform scale(1.0)
       color #eee
-
-@media screen and (max-width: 500px)
-  #toolbar
-    button
-      padding 20px 10px
-      font-size 2em

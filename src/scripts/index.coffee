@@ -1,5 +1,5 @@
 
-shaderbox = angular.module("shaderbox", [])
+shaderbox = angular.module("shaderbox", ["ui.ace"])
 
 require("./scripts/directives")(shaderbox)
 require("./scripts/controllers")(shaderbox)

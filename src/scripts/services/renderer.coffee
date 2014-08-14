@@ -5,25 +5,16 @@ class RendererService extends EventEmitter
 
   @$inject = ["LoaderService"]
 
-  WIDTH = window.innerWidth
-  HEIGHT = window.innerHeight - 80
   FOV = 45
   NEAR = 0.1
   FAR = 100.0
 
   DURATION = 2.0
 
-  GEOMETRIES = [
-    new window.THREE.PlaneGeometry(2.0 * (WIDTH / HEIGHT), 2.0)
-    new window.THREE.BoxGeometry(1.0, 1.0, 1.0)
-    new window.THREE.CylinderGeometry(0.5, 0.5, 1.5, 20)
-    new window.THREE.SphereGeometry(0.5, 20, 20)
-    new window.THREE.TorusGeometry(0.5, 0.2, 20, 20)
-  ]
-
   constructor: (@loader) ->
 
-    @slider = window.document.getElementById('slider')
+    @rendererElement = window.document.getElementById('renderer')
+    @sliderElement = window.document.getElementById('slider')
 
     @scene = new window.THREE.Scene()
 
@@ -41,34 +32,37 @@ class RendererService extends EventEmitter
           value: new window.THREE.Color(0xffffff)
         resolution:
           type: "v2"
-          value: new window.THREE.Vector2(WIDTH, HEIGHT)
+          value: new window.THREE.Vector2(@getWidth(), @getHeight())
         rate:
           type: "f"
           value: 0.0
       vertexShader: @loader.vertexShader
       fragmentShader: @loader.fragmentShader
     )
+
+    light = new window.THREE.PointLight(0xffffff)
+    light.position.set(-1,1,1)
+    @scene.add(light)
+
     @_currentIndex = 0
     @changeShape(@_currentIndex)
     @changeTexture()
 
     @renderer = new window.THREE.WebGLRenderer(alpha: true)
-    @renderer.setSize(WIDTH, HEIGHT)
+    @renderer.setSize(@getWidth(), @getHeight())
 
-    window.document.body.appendChild(@renderer.domElement)
+    @rendererElement.appendChild(@renderer.domElement)
 
     window.addEventListener('resize', =>
 
-      WIDTH = window.innerWidth
-      HEIGHT = window.innerHeight - 80
-      @renderer.setSize(WIDTH, HEIGHT)
+      @renderer.setSize(@getWidth(), @getHeight())
 
-      @camera.aspect = WIDTH/HEIGHT
+      @camera.aspect = @getAspect()
       @camera.updateProjectionMatrix()
       angle = FOV * Math.PI / 180
       @camera.position.z = 1.0 / Math.tan(angle / 2.0)
 
-      @material.uniforms.resolution.value = new window.THREE.Vector2(WIDTH, HEIGHT)
+      @material.uniforms.resolution.value = new window.THREE.Vector2(@getWidth(), @getHeight())
 
     )
 
@@ -84,30 +78,40 @@ class RendererService extends EventEmitter
         currentTime = 0.0
       if @_playing
         @material.uniforms.rate.value = currentTime / DURATION
-        @slider.style.width = "#{100 * currentTime / DURATION}%"
+        @sliderElement.style.width = "#{100 * currentTime / DURATION}%"
         currentTime += dt / 1000.0
-      @controls.update()
       @renderer.render(@scene, @camera)
 
   tooglePlay: ->
     @_playing = not @_playing
 
   resetCamera: ->
-    @camera = new window.THREE.PerspectiveCamera(FOV, WIDTH / HEIGHT, NEAR, FAR)
+    @camera = new window.THREE.PerspectiveCamera(FOV, @getAspect(), NEAR, FAR)
     angle = FOV * Math.PI / 180
     @camera.position.z = 1.0 / Math.tan(angle / 2.0)
-    @controls = new window.THREE.OrbitControls(@camera)
+
+  getWidth: -> @rendererElement.clientWidth
+  getHeight: -> @rendererElement.clientHeight
+  getAspect: -> @getWidth() / @getHeight()
 
   changeShape: (index) ->
     index ?= ++@_currentIndex
     if @mesh
       @scene.remove(@mesh)
-    @mesh = new window.THREE.Mesh(GEOMETRIES[index % (GEOMETRIES.length)], @material)
+
+    geometry = switch index % 5
+      when 0 then new window.THREE.PlaneGeometry(2.0 * @getAspect(), 2.0)
+      when 1 then new window.THREE.BoxGeometry(1.0, 1.0, 1.0)
+      when 2 then new window.THREE.CylinderGeometry(0.5, 0.5, 1.5, 20)
+      when 3 then new window.THREE.SphereGeometry(0.5, 20, 20)
+      when 4 then new window.THREE.TorusGeometry(0.5, 0.2, 20, 20)
+
+    @mesh = new window.THREE.Mesh(geometry, @material)
     @scene.add(@mesh)
 
   changeTexture: ->
     @material.uniforms.texture.value = window.THREE.ImageUtils.loadTexture(
-      "http://lorempixel.com/#{WIDTH}/#{HEIGHT}"
+      "http://lorempixel.com/#{@getWidth()}/#{@getHeight()}"
     )
 
   loadShader: (source) ->

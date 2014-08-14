@@ -27,9 +27,9 @@ NW_PACKAGE =
   "main": "index.html"
   "no-edit-menu": true
   "window":
-    "toolbar": false
+    # "toolbar": false
     "transparent": true
-    "title": "Shadedit"
+    "title": "ShaderBox"
     "width": 600
     "height": 800
     "position": "right"

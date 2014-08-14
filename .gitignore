@@ -1,0 +1,12 @@
+
+# NW
+build
+cache
+app
+
+#BOWER
+bower_components
+
+# NODE
+node_modules
+*.jsonc
